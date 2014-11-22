@@ -1,0 +1,15 @@
+{
+  "name": "swing",
+  "description": "game fuck about",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "^4.10.2",
+    "socket.io": "*"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}
