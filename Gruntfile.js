@@ -4,12 +4,12 @@ module.exports = function(grunt) {
     concat: {
       server: {
         src:  ['src/server/*.js', 'src/share/*.js'],
-        dest: 'build/server.js',
+        dest: 'build/server.js'
       },
       client: {
         src:  ['src/client/*.js', 'src/share/*.js'],
-        dest: 'public/assets/javascript/application.js',
-      },
+        dest: 'public/assets/javascript/application.js'
+      }
     },
     watch: {
       app: {
@@ -21,6 +21,7 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('default', ['concat']);
 };
