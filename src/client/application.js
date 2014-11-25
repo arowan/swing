@@ -10,7 +10,11 @@ BasicGame.Boot.prototype =
 {
     preload: function () {
         game.load.image('cube', 'images/cube.png');
-        game.load.spritesheet('man', 'images/man.png', 80, 106, 3);
+
+        // game.load.spritesheet('man', 'images/man.png', 80, 106, 3);
+
+        game.load.image('tileset', 'images/basic_ground_tiles.png');
+        game.load.tilemap('map', 'map/test.json', null, Phaser.Tilemap.TILED_JSON);
 
         game.time.advancedTiming = true;
 
@@ -23,33 +27,43 @@ BasicGame.Boot.prototype =
 
     },
     create: function () {
+
         isoGroup = game.add.group();
         //
 
         game.physics.isoArcade.gravity.setTo(0, 0, -500);
 
-        var cube;
-        for (var xx = 256; xx > 0; xx -= 160) {
-            for (var yy = 256; yy > 0; yy -= 160) {
-                cube = game.add.isoSprite(xx, yy, 0, 'cube', 0, isoGroup);
-                cube.anchor.set(0.5);
+        map = game.add.tilemap('map');
+        map.addTilesetImage('tileset');
 
-                // Enable the physics body on this cube.
-                game.physics.isoArcade.enable(cube);
+        layer = map.createLayer('test');
+        layer.resizeWorld();
+        map.setCollitionBetween(0,100);
 
-                cube.body.collideWorldBounds = true;
+        layer.debug = true;
 
-                cube.body.bounce.set(1, 1, 0.2);
+        // var cube;
+        // for (var xx = 256; xx > 0; xx -= 160) {
+        //     for (var yy = 256; yy > 0; yy -= 160) {  
+        //         cube = game.add.isoSprite(xx, yy, 0, 'cube', 0, isoGroup);
+        //         cube.anchor.set(0.5);
 
-                cube.body.drag.set(100, 100, 0);
-            }
-        }
+        //         // Enable the physics body on this cube.
+        //         game.physics.isoArcade.enable(cube);
 
-        player = game.add.isoSprite(0, 0, 0, 'man', 0, isoGroup);
-        player.animations.add('up', [2], 10, true);
-        player.animations.add('down', [0], 10, true);
-        player.animations.add('right', [1], 10, true); // broken should be 3. not sure why it dosnt work :(
-        player.animations.add('left', [1], 10, true);
+        //         cube.body.collideWorldBounds = true;
+
+        //         cube.body.bounce.set(1, 1, 0.2);
+
+        //         cube.body.drag.set(100, 100, 0);
+        //     }
+        // }
+
+        player = game.add.isoSprite(0, 0, 0, 'cube', 0, isoGroup);
+        // player.animations.add('up', [2], 10, true);
+        // player.animations.add('down', [0], 10, true);
+        // player.animations.add('right', [1], 10, true); // broken should be 3. not sure why it dosnt work :(
+        // player.animations.add('left', [1], 10, true);
         player.anchor.set(0.5);
         game.physics.isoArcade.enable(player);
         player.body.collideWorldBounds = true;
@@ -76,12 +90,12 @@ BasicGame.Boot.prototype =
 
         if (this.cursors.up.isDown) {
             player.body.velocity.y = -speed;
-            player.animations.play('up');
+            // player.animations.play('up');
             moving = true;
         }
         else if (this.cursors.down.isDown) {
             player.body.velocity.y = speed;
-            player.animations.play('down');
+            // player.animations.play('down');
             moving = true;
         }
         else {
@@ -90,12 +104,12 @@ BasicGame.Boot.prototype =
 
         if (this.cursors.left.isDown) {
             player.body.velocity.x = -speed;
-            player.animations.play('left');
+            // player.animations.play('left');
             moving = true;
         }
         else if (this.cursors.right.isDown) {
             player.body.velocity.x = speed;
-            player.animations.play('right');
+            // player.animations.play('right');
             moving = true;
         }
         else {
@@ -103,7 +117,7 @@ BasicGame.Boot.prototype =
         }
 
         if (!moving){
-            player.animations.stop();
+            // player.animations.stop();
         }
 
         game.physics.isoArcade.collide(isoGroup);
