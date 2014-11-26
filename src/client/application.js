@@ -116,7 +116,7 @@ BasicGame.Boot.prototype =
         }
 
         // Our collision and sorting code again.
-        game.physics.isoArcade.collide(isoGroup);
+        // game.physics.isoArcade.collide(isoGroup);
         game.iso.topologicalSort(isoGroup);
     }
 };
