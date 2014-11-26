@@ -55,16 +55,16 @@ BasicGame.Boot.prototype =
         var temp;
         var i = 0;
 
-        if(true){
-        _(yIterations).times(function(y){
-            _(xIterations).times(function(x){
-                temp = game.add.isoSprite(x * size, y * size, 0, 'tileset', null, isoGroup);
-                temp.anchor.set(0.5, 1);
-                temp.smoothed = true;
-                temp.body.moves = false;
-                i++;
+        if (true) {
+            _(yIterations).times(function (y) {
+                _(xIterations).times(function (x) {
+                    temp = game.add.isoSprite(x * size, y * size, 0, 'tileset', null, isoGroup);
+                    temp.anchor.set(0.5, 1);
+                    temp.smoothed = true;
+                    temp.body.moves = false;
+                    i++;
+                });
             });
-        });
         }
 
         this.cursors = game.input.keyboard.createCursorKeys();
@@ -75,49 +75,29 @@ BasicGame.Boot.prototype =
         game.physics.isoArcade.enable(player);
         player.body.collideWorldBounds = true;
 
-        // Set up our controls.
-        this.cursors = game.input.keyboard.createCursorKeys();
-
-        this.game.input.keyboard.addKeyCapture([
-            Phaser.Keyboard.LEFT,
-            Phaser.Keyboard.RIGHT,
-            Phaser.Keyboard.UP,
-            Phaser.Keyboard.DOWN,
-        ]);
-
-        var space = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-
-
-        // Make the camera follow the player.
         game.camera.follow(player);
+
+        this.moveTo = null;
     },
     update: function () {
         // Move the player at this speed.
-        var speed = 500;
+        var speed = 300;
 
-        if (this.cursors.up.isDown) {
-            player.body.velocity.y = -speed;
+        //  only move when you click
+        if (game.input.mousePointer.isDown)
+        {
+            var input = [game.input.x, game.input.y];
+            if (this.moveTo != input) {
+                this.moveTo = input;
+            }
         }
-        else if (this.cursors.down.isDown) {
-            player.body.velocity.y = speed;
-        }
-        else {
-            player.body.velocity.y = 0;
-        }
-
-        if (this.cursors.left.isDown) {
-            player.body.velocity.x = -speed;
-        }
-        else if (this.cursors.right.isDown) {
-            player.body.velocity.x = speed;
-        }
-        else {
-            player.body.velocity.x = 0;
+            //  400 is the speed it will move towards the mouse
+        if (this.moveTo) {
+            if (player.isoX != this.moveTo[0] && player.isoY != this.moveTo[1]) {
+                game.physics.arcade.moveToXY(player, this.moveTo[0], this.moveTo[1], speed);
+            }
         }
 
-        // Our collision and sorting code again.
-        // game.physics.isoArcade.collide(isoGroup);
-        game.iso.topologicalSort(isoGroup);
     },
     render: function () {
         game.debug.text(game.time.fps || '--', 2, 14, "#a7aebe");
