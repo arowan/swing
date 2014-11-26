@@ -1,6 +1,7 @@
 window.App = {};
 
-var game = new Phaser.Game(1024, 1024, Phaser.WEBGL, 'test', null, true, false);
+// this size will be the camera size
+var game = new Phaser.Game(1024, 768, Phaser.WEBGL, 'test', null, true, false);
 
 var BasicGame = function (game) { };
 
@@ -17,6 +18,7 @@ BasicGame.Boot.prototype =
         game.load.atlasJSONHash('tileset', 'images/tileset.png', 'map/tileset.json');
         game.load.image('cube', 'images/cube.png');
 
+        // this is the size of the map total
         game.world.setBounds(0, 0, 2048, 2048);
         game.physics.startSystem(Phaser.Plugin.Isometric.ISOARCADE);
 
@@ -45,12 +47,6 @@ BasicGame.Boot.prototype =
         tileArray[11] = 'wall';
         tileArray[12] = 'window';
 
-        var tiles = [];
-        _(1000).times(function() {
-            // tiles.push(_.random(0, tileArray.length));
-            tiles.push(2);
-        });
-
         var size = 32;
 
         var yIterations = Math.round(game.physics.isoArcade.bounds.frontY / size);
@@ -61,7 +57,7 @@ BasicGame.Boot.prototype =
 
         _(yIterations).times(function(y){
             _(xIterations).times(function(x){
-                temp = game.add.isoSprite(x * size, y * size, 0, 'tileset', tileArray[tiles[i]], isoGroup);
+                temp = game.add.isoSprite(x * size, y * size, 0, 'tileset', null, isoGroup);
                 temp.anchor.set(0.5, 1);
                 temp.smoothed = true;
                 temp.body.moves = false;
@@ -120,6 +116,9 @@ BasicGame.Boot.prototype =
         // Our collision and sorting code again.
         // game.physics.isoArcade.collide(isoGroup);
         game.iso.topologicalSort(isoGroup);
+    },
+    render: function () {
+        game.debug.text(game.time.fps || '--', 2, 14, "#a7aebe");
     }
 };
 
