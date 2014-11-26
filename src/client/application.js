@@ -53,6 +53,7 @@ BasicGame.Boot.prototype =
         var temp;
         var i = 0;
 
+        if(true){
         _(yIterations).times(function(y){
             _(xIterations).times(function(x){
                 temp = game.add.isoSprite(x * size, y * size, 0, 'tileset', null, isoGroup);
@@ -62,6 +63,7 @@ BasicGame.Boot.prototype =
                 i++;
             });
         });
+        }
 
         this.cursors = game.input.keyboard.createCursorKeys();
         // Create another cube as our 'player', and set it up just like the cubes above.
