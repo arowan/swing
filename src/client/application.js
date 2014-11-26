@@ -6,6 +6,8 @@ var BasicGame = function (game) { };
 BasicGame.Boot = function (game) { };
 
 var isoGroup, player;
+var tileSize = 32;
+var keyReset = false;
 
 BasicGame.Boot.prototype =
 {
@@ -45,10 +47,8 @@ BasicGame.Boot.prototype =
         tileArray[11] = 'wall';
         tileArray[12] = 'window';
 
-        var size = 32;
-
-        var yIterations = Math.round(game.physics.isoArcade.bounds.frontY / size);
-        var xIterations = Math.round(game.physics.isoArcade.bounds.frontX / size);
+        var yIterations = Math.round(game.physics.isoArcade.bounds.frontY / tileSize);
+        var xIterations = Math.round(game.physics.isoArcade.bounds.frontX / tileSize);
 
         var temp;
         var i = 0;
@@ -56,7 +56,7 @@ BasicGame.Boot.prototype =
         if (true) {
             _(yIterations).times(function (y) {
                 _(xIterations).times(function (x) {
-                    temp = game.add.isoSprite(x * size, y * size, 0, 'tileset', null, isoGroup);
+                    temp = game.add.isoSprite(x * tileSize, y * tileSize, 0, 'tileset', null, isoGroup);
                     temp.anchor.set(0.5, 1);
                     temp.smoothed = true;
                     temp.body.moves = false;
@@ -66,8 +66,10 @@ BasicGame.Boot.prototype =
         }
 
         this.cursors = game.input.keyboard.createCursorKeys();
+
         // Create another cube as our 'player', and set it up just like the cubes above.
-        player = game.add.isoSprite(128, 128, 39, 'cube', 0, isoGroup);
+        player = game.add.isoSprite(0, 0, 0, 'tileset', tileArray[10], isoGroup);
+
         player.tint = 0x86bfda;
         player.anchor.set(0.5);
         game.physics.isoArcade.enable(player);
@@ -79,26 +81,56 @@ BasicGame.Boot.prototype =
     },
     update: function () {
         // Move the player at this speed.
-        var speed = 300;
+        //var speed = 300;
 
         //  only move when you click
-        if (game.input.mousePointer.isDown)
-        {
-            var input = [game.input.x, game.input.y];
-            if (this.moveTo != input) {
-                this.moveTo = input;
-            }
+        //if (game.input.mousePointer.isDown)
+        //{
+        //    var input = [game.input.x, game.input.y];
+        //    if (this.moveTo != input) {
+        //        this.moveTo = input;
+        //    }
+        //}
+        this.moveTo = null;
+
+
+        if (this.cursors.left.justPressed() && !keyReset) {
+            keyReset = true;
+            this.moveTo = [player.isoX - tileSize, player.isoY];
+            console.log("left is down");
+        }
+        else if (this.cursors.right.justPressed() && !keyReset) {
+            keyReset = true;
+            this.moveTo = [player.isoX + tileSize, player.isoY];
+            console.log("right is down");
+        }
+        else if (this.cursors.up.justPressed() && !keyReset) {
+            keyReset = true;
+            this.moveTo = [player.isoX, player.isoY - tileSize];
+            console.log("up is down");
+        }
+        else if (this.cursors.down.justPressed() && !keyReset) {
+            keyReset = true;
+            this.moveTo = [player.isoX, player.isoY + tileSize];
+            console.log("down is down");
+        }
+
+        if (this.cursors.left.justReleased() || this.cursors.right.justReleased() || this.cursors.up.justReleased() || this.cursors.down.justReleased()) {
+            keyReset = false;
         }
             //  400 is the speed it will move towards the mouse
         if (this.moveTo) {
-            if (player.isoX != this.moveTo[0] && player.isoY != this.moveTo[1]) {
-                game.physics.arcade.moveToXY(player, this.moveTo[0], this.moveTo[1], speed);
+            if (player.body.x != this.moveTo[0] || player.body.y != this.moveTo[1]) {
+                console.log("attempting to move to " + this.moveTo[0] + "," + this.moveTo[1] + " from " + player.isoX + "," + player.isoY);
+                player.body.x = this.moveTo[0];
+                player.body.y = this.moveTo[1];
+                //game.physics.arcade.moveToXY(player, this.moveTo[0], this.moveTo[1], speed);
             }
         }
 
     },
     render: function () {
-        game.debug.text(game.time.fps || '--', 2, 14, "#a7aebe");
+        game.debug.text((game.time.fps || '--') + " playerX:" + player.isoX + " player Y:" + player.isoY, 2, 14, "#a7aebe" );
     }
 };
 
