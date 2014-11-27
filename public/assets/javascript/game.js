@@ -1,65 +1,41 @@
-var Core = function () {
-    this.ready = false;
-    this.users = [];
+window.App = {
+    ready: false
 };
 
-$(document).ready(function(){
-    window.App = new Core();
-    App.game = new Phaser.Game(
-        1024,
-        768,
-        Phaser.WEBGL,
-        'parentElement',
-        {
-            preload: App.beforePreload,
-            update: App.beforeUpdate,
-            render: App.beforeRender
-        }
-    );
-    console.log(App)
-})
-
-Core.prototype.beforeCreate = function () {
-    App.create();
-}
-
-Core.prototype.create = function () {
+App.create = function () {
     console.log('create');
+    App.ready = true;
 };
-Core.protoype.beforePreload = function () {
-
-    this.network = new Network('http://localhost');
-    this.network.socket.on('connected', function (data) {
-        this.users.push(new Player(data));
-        App.preload();
-    })
-}
-
-
-Core.prototype.preload = function () {
+App.preload = function () {
     console.log('preload');
-
-    this.players = [];
-    this.ready = false;
-
-    core = this;
-
-
+    setTimeout(function(){
+        App.create();
+    }, 1000);
 };
-Core.prototype.beforeRender = function () {
-    App.render();
+App.render = function () {
+    this.game.debug.text((this.game.time.fps || '--'), 2, 14, "#fff" );
 }
-
-Core.prototype.render = function () {
-    this.game.debug.text((this.game.time.fps || '--') + this.players.length, 2, 14, "#fff" );
-}
-Core.prototype.beforeUpdate = function () {
-    App.update();
+App.updateDecision = function () {
+    if (App.ready) {
+        App.update();
+    };
 };
 
-Core.prototype.update = function () {
+App.update = function () {
     console.log('update');
 };
+App.game = new Phaser.Game(
+    1024,
+    768,
+    Phaser.WEBGL,
+    'parentElement',
+    {
+        preload: App.preload,
+        //create: App.create,
+        update: App.updateDecision,
+        render: App.render
+    }
+);
 
 
 //
@@ -213,13 +189,9 @@ Core.prototype.update = function () {
 //game.state.start('Boot');
 //
 
-var Network = function (host) {
-    this.socket = io.connect(host);
+var Network = function () {
+    this.socket = io.connect('http://localhost');
 };
-var Player = function (object) {
-    this.attributes = _.defaults(object, {
-        id: null,
-        x: 0,
-        y: 0
-    });
+var Player = function () {
+    this.id = null;
 }
