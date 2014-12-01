@@ -1,20 +1,21 @@
+'use strict';
+
 var Core = function () {
-    this.ready = false;
-    this.users = [];
+    this.network = new Network('http://localhost');
+    this.map = new Map();
 };
 
 $(document).ready(function(){
     window.App = new Core();
-    App.game = new Phaser.Game(
+
+    var game = new Phaser.Game(
         1024,
         768,
         Phaser.WEBGL,
-        'parentElement',
-        {
-            preload: App.beforePreload,
-            update: App.beforeUpdate,
-            render: App.beforeRender
-        }
+        'parentElement'
     );
-    console.log(App)
+
+    game.state.add('Boot', App);
+    game.state.start('Boot');
+
 })

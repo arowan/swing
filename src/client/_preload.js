@@ -1,20 +1,19 @@
-Core.protoype.beforePreload = function () {
-
-    this.network = new Network('http://localhost');
-    this.network.socket.on('connected', function (data) {
-        this.users.push(new Player(data));
-        App.preload();
-    })
-}
-
+'use strict';
 
 Core.prototype.preload = function () {
     console.log('preload');
+    var game = this.game;
 
-    this.players = [];
-    this.ready = false;
+    game.time.advancedTiming = true;
 
-    core = this;
+    game.plugins.add(new Phaser.Plugin.Isometric(game));
+    game.load.atlasJSONHash('tileset', 'images/tileset.png', 'map/tileset.json');
+    game.load.image('cube', 'images/cube.png');
 
+    // this is the size of the map total
+    game.world.setBounds(0, 0, 2048, 2048);
+    game.physics.startSystem(Phaser.Plugin.Isometric.ISOARCADE);
+
+    game.iso.anchor.setTo(0.5, 0.05);
 
 };

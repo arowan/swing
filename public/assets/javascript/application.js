@@ -1,63 +1,90 @@
+'use strict';
+
 var Core = function () {
-    this.ready = false;
-    this.users = [];
+    this.network = new Network('http://localhost');
+    this.map = new Map();
 };
 
 $(document).ready(function(){
     window.App = new Core();
-    App.game = new Phaser.Game(
+
+    var game = new Phaser.Game(
         1024,
         768,
         Phaser.WEBGL,
-        'parentElement',
-        {
-            preload: App.beforePreload,
-            update: App.beforeUpdate,
-            render: App.beforeRender
-        }
+        'parentElement'
     );
-    console.log(App)
+
+    game.state.add('Boot', App);
+    game.state.start('Boot');
+
 })
 
-Core.prototype.beforeCreate = function () {
-    App.create();
-}
+'use strict';
 
 Core.prototype.create = function () {
     console.log('create');
+    var game = this.game;
+
+    // all this is mapping stuff, needs sorting out. for now just build a basic map.
+    var mapGroup = game.add.group();
+    mapGroup.physicsBodyType = Phaser.Plugin.Isometric.ISOARCADE;
+
+    var tileSize = 32;
+    var yIterations = Math.round(game.physics.isoArcade.bounds.frontY / tileSize);
+    var xIterations = Math.round(game.physics.isoArcade.bounds.frontX / tileSize);
+
+    var temp;
+    var i = 0;
+
+    _(yIterations).times(function (y) {
+        _(xIterations).times(function (x) {
+            temp = game.add.isoSprite(x * tileSize, y * tileSize, 0, 'tileset', null, mapGroup);
+            temp.anchor.set(0.5, 1);
+            temp.smoothed = true;
+            i++;
+        });
+    });
+    // --- end mapping stuff
+
+    var playerGroup = game.add.group();
+    playerGroup.physicsBodyType = Phaser.Plugin.Isometric.ISOARCADE;
+
+    game.cursors = game.input.keyboard.createCursorKeys();
+
 };
-Core.protoype.beforePreload = function () {
-
-    this.network = new Network('http://localhost');
-    this.network.socket.on('connected', function (data) {
-        this.users.push(new Player(data));
-        App.preload();
-    })
-}
-
+'use strict';
 
 Core.prototype.preload = function () {
     console.log('preload');
+    var game = this.game;
 
-    this.players = [];
-    this.ready = false;
+    game.time.advancedTiming = true;
 
-    core = this;
+    game.plugins.add(new Phaser.Plugin.Isometric(game));
+    game.load.atlasJSONHash('tileset', 'images/tileset.png', 'map/tileset.json');
+    game.load.image('cube', 'images/cube.png');
 
+    // this is the size of the map total
+    game.world.setBounds(0, 0, 2048, 2048);
+    game.physics.startSystem(Phaser.Plugin.Isometric.ISOARCADE);
+
+    game.iso.anchor.setTo(0.5, 0.05);
 
 };
-Core.prototype.beforeRender = function () {
-    App.render();
-}
-
+'use strict';
 Core.prototype.render = function () {
-    this.game.debug.text((this.game.time.fps || '--') + this.players.length, 2, 14, "#fff" );
+    this.game.debug.text((this.game.time.fps || '--') + ' <- fps | users -> ' + this.network.users.length, 2, 14, "#fff" );
 }
-Core.prototype.beforeUpdate = function () {
-    App.update();
-};
+'use strict';
 
 Core.prototype.update = function () {
+    if (this.network.ready) {
+        this.processUpdate()
+    }
+}
+
+Core.prototype.processUpdate = function () {
     console.log('update');
 };
 
@@ -213,13 +240,40 @@ Core.prototype.update = function () {
 //game.state.start('Boot');
 //
 
-var Network = function (host) {
-    this.socket = io.connect(host);
+'use strict';
+
+var Map = function () {
+
 };
+'use strict';
+
+var Network = function (host) {
+    this.users = [];
+    this.ready = false;
+    this.socket = io.connect(host);
+
+    this.socket.on('connected', function (data) {
+        this.users.push(new Player(data));
+        this.ready = true;
+    }.bind(this));
+
+};
+'use strict';
+
 var Player = function (object) {
     this.attributes = _.defaults(object, {
         id: null,
         x: 0,
         y: 0
     });
+};
+
+Player.prototype = {
+    buildSprite: function (game, group) {
+        var sprite = game.add.isoSprite(this.attributes.x, this.attributes.y, 0, 'tileset', 'mushroom', group);
+        sprite.anchor.set(0.5, 1);
+        sprite.body.collideWorldBounds = true;
+        game.physics.isoArcade.enable(sprite);
+        return sprite;
+    }
 }
