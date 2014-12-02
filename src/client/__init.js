@@ -1,7 +1,8 @@
 'use strict';
 
 var Core = function () {
-    this.network = new Network('http://localhost');
+    this.manager = new Manager();
+    this.network = new Network('http://localhost', this.manager);
     this.map = new Map();
 };
 

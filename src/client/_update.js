@@ -7,5 +7,22 @@ Core.prototype.update = function () {
 }
 
 Core.prototype.processUpdate = function () {
-    console.log('update');
+    var game = this.game;
+    var player = this.manager.user;
+
+    if (game.cursors.left.justPressed()) {
+        player.left();
+    }
+
+    if (game.cursors.right.justPressed()) {
+        player.right();
+    }
+
+    if (game.cursors.up.justPressed()) {
+        player.up();
+    }
+
+    if (game.cursors.down.justPressed()) {
+        player.down();
+    }
 };

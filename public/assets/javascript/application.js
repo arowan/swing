@@ -1,7 +1,8 @@
 'use strict';
 
 var Core = function () {
-    this.network = new Network('http://localhost');
+    this.manager = new Manager();
+    this.network = new Network('http://localhost', this.manager);
     this.map = new Map();
 };
 
@@ -23,7 +24,6 @@ $(document).ready(function(){
 'use strict';
 
 Core.prototype.create = function () {
-    console.log('create');
     var game = this.game;
 
     // all this is mapping stuff, needs sorting out. for now just build a basic map.
@@ -50,13 +50,14 @@ Core.prototype.create = function () {
     var playerGroup = game.add.group();
     playerGroup.physicsBodyType = Phaser.Plugin.Isometric.ISOARCADE;
 
+    this.manager.setGameAndGroup(game, playerGroup);
+
     game.cursors = game.input.keyboard.createCursorKeys();
 
 };
 'use strict';
 
 Core.prototype.preload = function () {
-    console.log('preload');
     var game = this.game;
 
     game.time.advancedTiming = true;
@@ -74,7 +75,7 @@ Core.prototype.preload = function () {
 };
 'use strict';
 Core.prototype.render = function () {
-    this.game.debug.text((this.game.time.fps || '--') + ' <- fps | users -> ' + this.network.users.length, 2, 14, "#fff" );
+    this.game.debug.text((this.game.time.fps || '--') + ' <- fps | users -> ' + this.manager.store.length, 2, 14, "#fff" );
 }
 'use strict';
 
@@ -85,7 +86,24 @@ Core.prototype.update = function () {
 }
 
 Core.prototype.processUpdate = function () {
-    console.log('update');
+    var game = this.game;
+    var player = this.manager.user;
+
+    if (game.cursors.left.justPressed()) {
+        player.left();
+    }
+
+    if (game.cursors.right.justPressed()) {
+        player.right();
+    }
+
+    if (game.cursors.up.justPressed()) {
+        player.up();
+    }
+
+    if (game.cursors.down.justPressed()) {
+        player.down();
+    }
 };
 
 
@@ -242,38 +260,160 @@ Core.prototype.processUpdate = function () {
 
 'use strict';
 
+var Manager = function () {
+    this.store = [];
+    this.game = null;
+    this.group = null;
+    this.network = null;
+    this.user = null; // dont like this.
+};
+
+Manager.prototype = {
+    addUser: function (player) {
+        var p = new Player(player, this);
+        this.user = p;
+        if (this.game && this.group) {
+            p.buildSprite(this.game, this.group);
+        }
+    },
+    add: function (player) {
+        var p = new Player(player, this);
+        this.store.push(p);
+        if (this.game && this.group) {
+            p.buildSprite(this.game, this.group);
+        }
+    },
+    remove: function (player){
+        var p = this.getPlayer(player);
+        this.group.remove(p.sprite);
+        var index = this.store.indexOf(p);
+        this.store.splice(index, 1);
+    },
+    update: function (player) {
+        var p = this.getPlayer(player);
+        p.move(player.x, player.y);
+    },
+    getPlayer: function (player) {
+        return _.findWhere(this.store, {id: player.id});
+    },
+    buildSprites: function () {
+        this.user.buildSprite(this.game, this.group); // dont like this.
+        _.each(this.store, function (player) {
+            player.buildSprite(this.game, this.group);
+        }.bind(this))
+    },
+    setGameAndGroup: function (game, group) {
+        this.game = game;
+        this.group = group;
+        this.buildSprites();
+    },
+    emitMove: function (player) {
+        if (player) {
+            this.network.socket.emit('move', player.attributes);
+        }
+    }
+};
+
+'use strict';
+
 var Map = function () {
 
 };
 'use strict';
 
-var Network = function (host) {
-    this.users = [];
+var Network = function (host, manager) {
+
+    this.manager = manager;
+    this.manager.network = this; //do not like this.
+
+    this.player = null;
     this.ready = false;
     this.socket = io.connect(host);
 
     this.socket.on('connected', function (data) {
-        this.users.push(new Player(data));
+        this.manager.addUser(data);
+    }.bind(this));
+
+    this.socket.on('addPlayer', function (data) {
+        this.manager.add(data);
+    }.bind(this));
+
+    this.socket.on('otherPlayers', function (data) {
+        _.each(data, function (player){
+            this.manager.add(player);
+        }.bind(this));
         this.ready = true;
+    }.bind(this));
+
+    this.socket.on('updatePlayer', function (data) {
+        console.log('update', data);
+        this.manager.update(data);
+    }.bind(this));
+
+    this.socket.on('removePlayer', function (data) {
+        this.manager.remove(data);
     }.bind(this));
 
 };
 'use strict';
 
-var Player = function (object) {
+var Player = function (object, manager) {
     this.attributes = _.defaults(object, {
         id: null,
         x: 0,
         y: 0
     });
+    this.id = this.attributes.id; // need to rethink this also
+    this.speed = 1;
+    this.manager = manager;
 };
 
 Player.prototype = {
     buildSprite: function (game, group) {
-        var sprite = game.add.isoSprite(this.attributes.x, this.attributes.y, 0, 'tileset', 'mushroom', group);
+        var items = ['mushroom', 'stone', 'bush2', 'window'];
+        var sprite = game.add.isoSprite(this.attributes.x, this.attributes.y, 0, 'tileset', _.sample(items), group);
+
+        game.physics.isoArcade.enable(sprite);
+        game.camera.follow(sprite);
+
         sprite.anchor.set(0.5, 1);
         sprite.body.collideWorldBounds = true;
-        game.physics.isoArcade.enable(sprite);
+
+        this.sprite = sprite;
         return sprite;
+    },
+    move: function (x, y) {
+        this.attributes.x = x;
+        this.attributes.y = y;
+        this.sprite.body.x = this.attributes.x;
+        this.sprite.body.y = this.attributes.y;
+    },
+    left: function () {
+        var x, y;
+        x = this.attributes.x - this.speed;
+        y = this.attributes.y;
+        this.move(x, y);
+        this.manager.emitMove(this);
+    },
+    right: function () {
+        var x, y;
+        x = this.attributes.x + this.speed;
+        y = this.attributes.y;
+        this.move(x, y);
+        this.manager.emitMove(this);
+    },
+    up: function () {
+        var x, y;
+        x = this.attributes.x;
+        y = this.attributes.y - this.speed;
+        this.move(x, y);
+        this.manager.emitMove(this);
+    },
+    down: function () {
+        var x, y;
+        x = this.attributes.x;
+        y = this.attributes.y + this.speed;
+        this.move(x, y);
+        this.manager.emitMove(this);
     }
-}
+};

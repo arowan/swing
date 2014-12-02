@@ -1,7 +1,6 @@
 'use strict';
 
 Core.prototype.create = function () {
-    console.log('create');
     var game = this.game;
 
     // all this is mapping stuff, needs sorting out. for now just build a basic map.
@@ -27,6 +26,8 @@ Core.prototype.create = function () {
 
     var playerGroup = game.add.group();
     playerGroup.physicsBodyType = Phaser.Plugin.Isometric.ISOARCADE;
+
+    this.manager.setGameAndGroup(game, playerGroup);
 
     game.cursors = game.input.keyboard.createCursorKeys();
 

@@ -5,7 +5,8 @@
   "private": true,
   "dependencies": {
     "express": "^4.10.2",
-    "socket.io": "*"
+    "socket.io": "*",
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

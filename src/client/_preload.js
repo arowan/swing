@@ -1,7 +1,6 @@
 'use strict';
 
 Core.prototype.preload = function () {
-    console.log('preload');
     var game = this.game;
 
     game.time.advancedTiming = true;
