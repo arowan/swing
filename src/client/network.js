@@ -25,7 +25,6 @@ var Network = function (host, manager) {
     }.bind(this));
 
     this.socket.on('updatePlayer', function (data) {
-        console.log('update', data);
         this.manager.update(data);
     }.bind(this));
 

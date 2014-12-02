@@ -6,6 +6,8 @@ var Manager = function () {
     this.group = null;
     this.network = null;
     this.user = null; // dont like this.
+
+    this.updates = [];
 };
 
 Manager.prototype = {
@@ -30,8 +32,9 @@ Manager.prototype = {
         this.store.splice(index, 1);
     },
     update: function (player) {
-        var p = this.getPlayer(player);
-        p.move(player.x, player.y);
+        this.updates.push(player);
+        //var p = this.getPlayer(player);
+        //p.move(player.x, player.y);
     },
     getPlayer: function (player) {
         return _.findWhere(this.store, {id: player.id});

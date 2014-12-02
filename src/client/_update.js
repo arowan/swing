@@ -25,4 +25,11 @@ Core.prototype.processUpdate = function () {
     if (game.cursors.down.justPressed()) {
         player.down();
     }
+
+    _.each(this.manager.updates, function(player, index) {
+        var p = this.manager.getPlayer(player);
+        p.move(player.x, player.y);
+    }.bind(this));
+
+    this.manager.updates = [];
 };
