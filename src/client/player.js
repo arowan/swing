@@ -7,7 +7,7 @@ var Player = function (object, manager) {
         y: 0
     });
     this.id = this.attributes.id; // need to rethink this also
-    this.speed = 1;
+    this.speed = 32;
     this.manager = manager;
 };
 
