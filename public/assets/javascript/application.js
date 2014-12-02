@@ -105,7 +105,7 @@ Core.prototype.processUpdate = function () {
         player.down();
     }
 
-    _.each(this.manager.updates, function(player, index) {
+    _.each(this.manager.updates, function(player) {
         var p = this.manager.getPlayer(player);
         p.move(player.x, player.y);
     }.bind(this));
@@ -282,14 +282,14 @@ Manager.prototype = {
         var p = new Player(player, this);
         this.user = p;
         if (this.game && this.group) {
-            p.buildSprite(this.game, this.group);
+            p.buildSprite(this.game, this.group, true);
         }
     },
     add: function (player) {
         var p = new Player(player, this);
         this.store.push(p);
         if (this.game && this.group) {
-            p.buildSprite(this.game, this.group);
+            p.buildSprite(this.game, this.group, false);
         }
     },
     remove: function (player){
@@ -307,9 +307,11 @@ Manager.prototype = {
         return _.findWhere(this.store, {id: player.id});
     },
     buildSprites: function () {
-        this.user.buildSprite(this.game, this.group); // dont like this.
+        console.log("building sprite for user, id: " + this.user.id);
+        this.user.buildSprite(this.game, this.group, true); // dont like this.
         _.each(this.store, function (player) {
-            player.buildSprite(this.game, this.group);
+            console.log("building sprite for player, id: " + player.id);
+            player.buildSprite(this.game, this.group, false);
         }.bind(this))
     },
     setGameAndGroup: function (game, group) {
@@ -378,12 +380,12 @@ var Player = function (object, manager) {
 };
 
 Player.prototype = {
-    buildSprite: function (game, group) {
+    buildSprite: function (game, group, camera) {
         var items = ['mushroom', 'stone', 'bush2', 'window'];
         var sprite = game.add.isoSprite(this.attributes.x, this.attributes.y, 0, 'tileset', _.sample(items), group);
 
         game.physics.isoArcade.enable(sprite);
-        game.camera.follow(sprite);
+        if (camera) game.camera.follow(sprite);
 
         sprite.anchor.set(0.5, 1);
         sprite.body.collideWorldBounds = true;

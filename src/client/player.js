@@ -12,12 +12,12 @@ var Player = function (object, manager) {
 };
 
 Player.prototype = {
-    buildSprite: function (game, group) {
+    buildSprite: function (game, group, camera) {
         var items = ['mushroom', 'stone', 'bush2', 'window'];
         var sprite = game.add.isoSprite(this.attributes.x, this.attributes.y, 0, 'tileset', _.sample(items), group);
 
         game.physics.isoArcade.enable(sprite);
-        game.camera.follow(sprite);
+        if (camera) game.camera.follow(sprite);
 
         sprite.anchor.set(0.5, 1);
         sprite.body.collideWorldBounds = true;

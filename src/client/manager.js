@@ -15,14 +15,14 @@ Manager.prototype = {
         var p = new Player(player, this);
         this.user = p;
         if (this.game && this.group) {
-            p.buildSprite(this.game, this.group);
+            p.buildSprite(this.game, this.group, true);
         }
     },
     add: function (player) {
         var p = new Player(player, this);
         this.store.push(p);
         if (this.game && this.group) {
-            p.buildSprite(this.game, this.group);
+            p.buildSprite(this.game, this.group, false);
         }
     },
     remove: function (player){
@@ -41,10 +41,10 @@ Manager.prototype = {
     },
     buildSprites: function () {
         console.log("building sprite for user, id: " + this.user.id);
-        this.user.buildSprite(this.game, this.group); // dont like this.
+        this.user.buildSprite(this.game, this.group, true); // dont like this.
         _.each(this.store, function (player) {
             console.log("building sprite for player, id: " + player.id);
-            player.buildSprite(this.game, this.group);
+            player.buildSprite(this.game, this.group, false);
         }.bind(this))
     },
     setGameAndGroup: function (game, group) {

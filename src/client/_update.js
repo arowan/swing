@@ -26,7 +26,7 @@ Core.prototype.processUpdate = function () {
         player.down();
     }
 
-    _.each(this.manager.updates, function(player, index) {
+    _.each(this.manager.updates, function(player) {
         var p = this.manager.getPlayer(player);
         p.move(player.x, player.y);
     }.bind(this));
