@@ -19,10 +19,12 @@ Manager.prototype = {
         }
     },
     add: function (player) {
-        var p = new Player(player, this);
-        this.store.push(p);
-        if (this.game && this.group) {
-            p.buildSprite(this.game, this.group, false);
+        if (this.user && player && player.id != this.user.id) {
+            var p = new Player(player, this);
+            this.store.push(p);
+            if (this.game && this.group) {
+                p.buildSprite(this.game, this.group, false);
+            }
         }
     },
     remove: function (player){
@@ -37,6 +39,7 @@ Manager.prototype = {
         //p.move(player.x, player.y);
     },
     getPlayer: function (player) {
+        if (player.id == this.user.id) return this.user;
         return _.findWhere(this.store, {id: player.id});
     },
     buildSprites: function () {
