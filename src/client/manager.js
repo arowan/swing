@@ -40,8 +40,10 @@ Manager.prototype = {
         return _.findWhere(this.store, {id: player.id});
     },
     buildSprites: function () {
+        console.log("building sprite for user, id: " + this.user.id);
         this.user.buildSprite(this.game, this.group); // dont like this.
         _.each(this.store, function (player) {
+            console.log("building sprite for player, id: " + player.id);
             player.buildSprite(this.game, this.group);
         }.bind(this))
     },
