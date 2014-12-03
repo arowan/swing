@@ -13,15 +13,24 @@ module.exports = function(grunt) {
     },
     watch: {
       app: {
-        files: 'src/**/*.js',
-        tasks: ['concat']
+        files: ['src/**/*.js','spec/**/*Spec.js'],
+        tasks: ['concat','jasmine']
+      }
+    },
+    jasmine: {
+      pivotal: {
+        src: 'src/**/*.js',
+        options: {
+          specs: 'spec/**/*Spec.js',
+          helpers: 'spec/**/*Helper.js'
+        }
       }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
 
   grunt.registerTask('default', ['concat']);
 };

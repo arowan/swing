@@ -6,26 +6,30 @@ var User = function () {
 
 
 (function() {
-  var app, express, http, io;
+  var app, express, http, io, path, map;
 
   express = require('express');
   app = express();
   http = require('http').Server(app);
   io = require('socket.io')(http);
   path = require('path');
-  _ = require('underscore');
-  
+
+
   app.use(express["static"]('public/assets'));
-
-  var user, users = [];
-
   app.get('/', function(req, res) {
     return res.sendFile(path.join(__dirname, '../public', 'index.html'));
   });
 
-  io.on('connection', function(socket) {
+  // Map instantiation - for now we only have a single map, later we will have many.
+  //map = new Map(32,32);
 
-    console.log('a user connected');
+  var user, users = [];
+
+  //var onConnection =
+
+  io.on('connection', function(socket) {
+    var address = socket.handshake.address;
+    console.log('A user connected from ' + address);
     socket.emit('otherPlayers', users);
 
     user = new User();

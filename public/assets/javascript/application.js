@@ -2,7 +2,7 @@
 
 var Core = function () {
     this.manager = new Manager();
-    this.network = new Network('http://localhost', this.manager);
+    this.network = new Network('http://80.1.153.15', this.manager);
     this.map = new Map();
 };
 
@@ -120,6 +120,28 @@ Core.prototype.processUpdate = function () {
     }.bind(this));
 
     this.manager.updates = [];
+};
+/**
+ * Created by Ben on 03/12/2014.
+ */
+
+function helloWorld() {
+    return "Hello world!";
+}
+
+function anotherFunction() {
+
+
+}
+
+var Person = function() {};
+
+Person.prototype.helloSomeone = function(toGreet) {
+    return this.sayHello() + " " + toGreet;
+};
+
+Person.prototype.sayHello = function() {
+    return "Hello";
 };
 
 
@@ -295,15 +317,20 @@ Manager.prototype = {
         }
     },
     add: function (player) {
-        if (this.user && player && player.id != this.user.id) {
+        console.log("Add was called for player ID " + player.id);
+        console.log(this.user);
+        if ((this.user && player && player.id != this.user.id) || this.user == null) {
+            console.log("Inner loop reached");
             var p = new Player(player, this);
             this.store.push(p);
             if (this.game && this.group) {
+                console.log("Calling buildSprite for player ID " + p.id)
                 p.buildSprite(this.game, this.group, false);
             }
-        }
+       }
     },
     remove: function (player){
+        console.log("Removing player ID " + player.id)
         var p = this.getPlayer(player);
         this.group.remove(p.sprite);
         var index = this.store.indexOf(p);
@@ -315,8 +342,14 @@ Manager.prototype = {
         //p.move(player.x, player.y);
     },
     getPlayer: function (player) {
-        if (player.id == this.user.id) return this.user;
-        return _.findWhere(this.store, {id: player.id});
+        if (player.id == this.user.id) {
+            console.log("getPlayer attempting to return local user object");
+            return this.user;
+        }
+        console.log("getPlayer attempting to return player id " + player.id);
+        var foundPlayer =  _.findWhere(this.store, {id: player.id});
+        console.log("Found player with ID: " + foundPlayer.id);
+        return foundPlayer;
     },
     buildSprites: function () {
         console.log("building sprite for user, id: " + this.user.id);
@@ -340,11 +373,6 @@ Manager.prototype = {
 
 'use strict';
 
-var Map = function () {
-
-};
-'use strict';
-
 var Network = function (host, manager) {
 
     this.manager = manager;
@@ -364,6 +392,7 @@ var Network = function (host, manager) {
 
     this.socket.on('otherPlayers', function (data) {
         _.each(data, function (player){
+            console.log("Adding player ID " + player.id);
             this.manager.add(player);
         }.bind(this));
         this.ready = true;

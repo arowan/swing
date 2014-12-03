@@ -19,6 +19,7 @@ var Network = function (host, manager) {
 
     this.socket.on('otherPlayers', function (data) {
         _.each(data, function (player){
+            console.log("Adding player ID " + player.id);
             this.manager.add(player);
         }.bind(this));
         this.ready = true;

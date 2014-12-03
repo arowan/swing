@@ -2,7 +2,7 @@
 
 var Core = function () {
     this.manager = new Manager();
-    this.network = new Network('http://localhost', this.manager);
+    this.network = new Network('http://80.1.153.15', this.manager);
     this.map = new Map();
 };
 

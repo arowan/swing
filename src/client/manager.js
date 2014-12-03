@@ -19,15 +19,20 @@ Manager.prototype = {
         }
     },
     add: function (player) {
-        if (this.user && player && player.id != this.user.id) {
+        console.log("Add was called for player ID " + player.id);
+        console.log(this.user);
+        if ((this.user && player && player.id != this.user.id) || this.user == null) {
+            console.log("Inner loop reached");
             var p = new Player(player, this);
             this.store.push(p);
             if (this.game && this.group) {
+                console.log("Calling buildSprite for player ID " + p.id)
                 p.buildSprite(this.game, this.group, false);
             }
-        }
+       }
     },
     remove: function (player){
+        console.log("Removing player ID " + player.id)
         var p = this.getPlayer(player);
         this.group.remove(p.sprite);
         var index = this.store.indexOf(p);
@@ -39,8 +44,14 @@ Manager.prototype = {
         //p.move(player.x, player.y);
     },
     getPlayer: function (player) {
-        if (player.id == this.user.id) return this.user;
-        return _.findWhere(this.store, {id: player.id});
+        if (player.id == this.user.id) {
+            console.log("getPlayer attempting to return local user object");
+            return this.user;
+        }
+        console.log("getPlayer attempting to return player id " + player.id);
+        var foundPlayer =  _.findWhere(this.store, {id: player.id});
+        console.log("Found player with ID: " + foundPlayer.id);
+        return foundPlayer;
     },
     buildSprites: function () {
         console.log("building sprite for user, id: " + this.user.id);
