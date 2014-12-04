@@ -7,7 +7,7 @@ module.exports = function(grunt) {
         dest: 'build/server.js'
       },
       client: {
-        src:  ['src/client/*.js', 'src/share/*.js'],
+        src:  ['src/client/**/*.js'],
         dest: 'public/assets/javascript/application.js'
       }
     },
@@ -19,7 +19,12 @@ module.exports = function(grunt) {
     },
     jasmine: {
       pivotal: {
-        src: 'src/**/*.js',
+        src: [
+          'public/assets/javascript/jquery-2.1.1.min.js',
+          'public/assets/javascript/underscore.js',
+          'src/client/**/*.js',
+          'src/shared/**/*.js'
+        ],
         options: {
           specs: 'spec/**/*Spec.js',
           helpers: 'spec/**/*Helper.js'
