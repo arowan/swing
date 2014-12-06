@@ -3,7 +3,16 @@ module.exports = function(grunt) {
   grunt.initConfig({
     concat: {
       server: {
-        src:  ['src/server/*.js', 'src/share/*.js'],
+        src:  [
+          'public/assets/javascript/underscore.js',
+          'src/server/gameobject.js',
+          'src/server/actor.js',
+          'src/server/player.js',
+          'src/server/gamestate.js',
+          'src/server/user.js',
+          'src/server/server.js',
+          'src/share/*.js'
+        ],
         dest: 'build/server.js'
       },
       client: {
@@ -20,8 +29,16 @@ module.exports = function(grunt) {
     jasmine: {
       pivotal: {
         src: [
-          'public/assets/javascript/jquery-2.1.1.min.js',
+          //'public/assets/javascript/jquery-2.1.1.min.js',
           'public/assets/javascript/underscore.js',
+          // These are listed individually because if they aren't Jasmine loads
+          // them in the wrong order and you get dependency errors.
+          'src/server/gameobject.js',
+          'src/server/actor.js',
+          'src/server/player.js',
+          'src/server/gamestate.js',
+          'src/server/user.js',
+          'src/server/server.js',
           'src/client/**/*.js',
           'src/shared/**/*.js'
         ],

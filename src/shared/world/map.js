@@ -17,4 +17,4 @@ var Map = function (width, height) {
 
 Map.prototype = {
 
-}
+};
