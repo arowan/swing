@@ -5,4 +5,9 @@
 var Tile = function() {
     this.tiletype = null;
     this.contents = [];
+    this.passable = true;
+}
+
+Tile.prototype = {
+
 }

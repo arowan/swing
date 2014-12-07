@@ -30,6 +30,7 @@ var Network = function (host, manager) {
     }.bind(this));
 
     this.socket.on('removePlayer', function (data) {
+        console.log("Removing player: " + data);
         this.manager.remove(data);
     }.bind(this));
 
