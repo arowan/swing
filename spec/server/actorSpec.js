@@ -12,7 +12,7 @@ describe("Actor", function() {
         it("Can access the properties of the prototype (GameObject)", function() {
             var actor = new Actor();
 
-            expect(actor.x).toEqual(1);
+            expect(actor.x).toEqual(0);
         })
     });
 });

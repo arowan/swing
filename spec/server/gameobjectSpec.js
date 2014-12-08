@@ -11,3 +11,29 @@ describe("GameObject", function() {
         });
     });
 });
+
+describe("setCoordinates", function () {
+    it ("assign x and y coordinates in one go", function (){
+        var x = 990;
+        var y = 15;
+
+        var gameObj = new GameObject();
+        gameObj.setCoordinates(x,y);
+
+        expect(gameObj.x).toEqual(x);
+        expect(gameObj.y).toEqual(y);
+    });
+});
+
+
+describe("coordinates", function () {
+    it ("returns x and y values", function (){
+        var x = 163;
+        var y = 511;
+
+        var gameObj = new GameObject();
+        gameObj.setCoordinates(x, y);
+
+        expect(gameObj.coordinates()).toEqual([x,y]);
+    });
+});

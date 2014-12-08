@@ -1426,7 +1426,15 @@ var GameObject = function () {
 };
 
 GameObject.prototype = {
-
+    setCoordinates: function (x, y) {
+      // Set GameObject coordinates in one go
+        this.x = x;
+        this.y = y;
+    },
+    coordinates: function () {
+        // return coordinates of GameObject in array, object may be more useful later? {x: x ,y: y}
+        return [this.x, this.y];
+    }
 }
 
 /**
@@ -1448,6 +1456,7 @@ Actor.prototype.constructor = Actor;
 
 // A player is an in game object representing a human controlled character.
 // TODO: Move this to shared or something, the name conflicts with the client player in Jasmine
+    // Not sure we will be able to share this. 'require' wont be available to the client.
 var ServerPlayer = function() {
     Actor.call(this);
     var _ = require('underscore');
@@ -1479,12 +1488,11 @@ GameState.prototype = {
         this.users.splice(userIndex, 1);
     },
     allPlayers: function() {
-        var players = [];
+        // refactored to use _.map
         var _ = require('underscore');
-        _.forEach(this.users, function(user) {
-            players.push(user.player);
-        });
-        return players;
+        return _.map(this.users, function (user) {
+            return user.player;
+        })
     }
 };
 /**

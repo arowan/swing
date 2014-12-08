@@ -9,5 +9,13 @@ var GameObject = function () {
 };
 
 GameObject.prototype = {
-
+    setCoordinates: function (x, y) {
+      // Set GameObject coordinates in one go
+        this.x = x;
+        this.y = y;
+    },
+    coordinates: function () {
+        // return coordinates of GameObject in array, object may be more useful later? {x: x ,y: y}
+        return [this.x, this.y];
+    }
 }

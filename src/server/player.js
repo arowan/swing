@@ -4,6 +4,7 @@
 
 // A player is an in game object representing a human controlled character.
 // TODO: Move this to shared or something, the name conflicts with the client player in Jasmine
+    // Not sure we will be able to share this. 'require' wont be available to the client.
 var ServerPlayer = function() {
     Actor.call(this);
     var _ = require('underscore');

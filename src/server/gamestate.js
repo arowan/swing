@@ -17,11 +17,10 @@ GameState.prototype = {
         this.users.splice(userIndex, 1);
     },
     allPlayers: function() {
-        var players = [];
+        // refactored to use _.map
         var _ = require('underscore');
-        _.forEach(this.users, function(user) {
-            players.push(user.player);
-        });
-        return players;
+        return _.map(this.users, function (user) {
+            return user.player;
+        })
     }
 };
