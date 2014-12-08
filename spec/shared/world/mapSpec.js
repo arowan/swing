@@ -1,5 +1,5 @@
 /**
- * Created by Ben on 03/12/2014.
+ * Created by Ben  on 03/12/2014.
  */
 describe("Map", function() {
     describe("Map constructor", function () {
