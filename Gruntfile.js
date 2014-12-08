@@ -14,12 +14,16 @@ module.exports = function(grunt) {
       }
     },
     jasmine: {
-      jasmine: {
-        pivotal: {
-          options: {
-            host: 'http://localhost:4000',
-            specs: 'spec/client/networkSpec.js'
-          }
+      pivotal: {
+        src: [
+          'public/assets/javascript/jquery-2.1.1.min.js',
+          'public/assets/javascript/underscore.js',
+          'public/assets/javascript/phaser.min.js',
+          'public/assets/javascript/phaser-plugin-isometric.js',
+          'public/assets/javascript/application.js'
+        ],
+        options: {
+          specs: 'spec/client/networkSpec.js'
         }
       }
     },
