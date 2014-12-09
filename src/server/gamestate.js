@@ -1,6 +1,9 @@
 /**
  * Created by Ben on 06/12/2014.
  */
+var GameObject = require("../../src/server/gameObject.js");
+var User = require("../../src/server/user.js")
+var _ = require('underscore');
 
 var GameState = function() {
     this.users = [];
@@ -18,9 +21,10 @@ GameState.prototype = {
     },
     allPlayers: function() {
         // refactored to use _.map
-        var _ = require('underscore');
         return _.map(this.users, function (user) {
             return user.player;
         })
     }
 };
+
+module.exports = GameState;

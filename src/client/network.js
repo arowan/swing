@@ -3,7 +3,7 @@
 var Network = function (host, manager) {
 
     this.manager = manager;
-    this.manager.network = this; //do not like this.
+    this.manager.network = this; //do not like this
 
     this.player = null;
     this.ready = false;

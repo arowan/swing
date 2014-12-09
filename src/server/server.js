@@ -1,17 +1,20 @@
 (function() {
-  var app, express, http, io, path, gameState;
+  var express = require('express');
+  var app = express();
+  var http = require('http').Server(app);
+  var io = require('socket.io')(http);
+  var path = require('path');
+  var GameObject = require('./gameObject.js');
+  var Actor = require('./actor.js');
+  var GameState = require('./gameState.js');
+  var ServerPlayer = require('./serverPlayer.js');
+  var User = require('./user.js');
 
-  express = require('express');
-  app = express();
-  http = require('http').Server(app);
-  io = require('socket.io')(http);
-  path = require('path');
-  gameState = new GameState();
-
+  var gameState = new GameState();
 
   app.use(express["static"]('public/assets'));
   app.get('/', function(req, res) {
-    return res.sendFile(path.join(__dirname, '../public', 'index.html'));
+    return res.sendFile(path.join(__dirname, '../../public', 'index.html'));
   });
 
   // Map instantiation - for now we only have a single map, later we will have many.
