@@ -1,7 +1,7 @@
 /**
  * Created by Ben on 06/12/2014.
  */
-var GameObject = require("../../src/server/gameObject.js");
+var GameObject = require("../../src/server/gameobject.js");
 var Actor = require("../../src/server/actor.js");
 var expect = require("expect.js");
 

@@ -5,7 +5,7 @@
 // to the game world, such as their IP address, connection time, etc. Their player
 // information is kept in their assigned Player object.
 
-var ServerPlayer = require("../../src/server/serverPlayer.js");
+var ServerPlayer = require("./serverplayer.js");
 var _ = require('underscore');
 
 var User = function(ip_address) {

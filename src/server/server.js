@@ -4,10 +4,10 @@
   var http = require('http').Server(app);
   var io = require('socket.io')(http);
   var path = require('path');
-  var GameObject = require('./gameObject.js');
+  var GameObject = require('./gameobject.js');
   var Actor = require('./actor.js');
-  var GameState = require('./gameState.js');
-  var ServerPlayer = require('./serverPlayer.js');
+  var GameState = require('./gamestate.js');
+  var ServerPlayer = require('./serverplayer.js');
   var User = require('./user.js');
 
   var gameState = new GameState();

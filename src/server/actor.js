@@ -3,7 +3,7 @@
  */
 // An actor is any "living" thing, including players, npcs, monsters, etc.
 
-var GameObject = require("../../src/server/gameObject.js");
+var GameObject = require("./gameobject.js");
 
 var Actor = function () {
     GameObject.call(this);

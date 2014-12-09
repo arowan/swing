@@ -1,8 +1,8 @@
 /**
  * Created by Ben on 06/12/2014.
  */
-var GameObject = require("../../src/server/gameObject.js");
-var User = require("../../src/server/user.js")
+var GameObject = require("./gameobject.js");
+var User = require("./user.js")
 var _ = require('underscore');
 
 var GameState = function() {

@@ -1,7 +1,7 @@
 /**
  * Created by Ben on 06/12/2014.
  */
-var GameState = require("../../src/server/gameState.js");
+var GameState = require("../../src/server/gamestate.js");
 var User = require("../../src/server/user.js");
 var expect = require("expect.js");
 

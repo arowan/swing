@@ -26,6 +26,7 @@ module.exports = function(grunt) {
             'public/assets/javascript/phaser.min.js',
             'public/assets/javascript/phaser-plugin-isometric.js'
           ],
+          display: 'full',
           specs: 'spec/client/*.js'
         }
       }
