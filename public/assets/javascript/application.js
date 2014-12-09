@@ -12,7 +12,7 @@ $(document).ready(function(){
     var game = new Phaser.Game(
         1024,
         768,
-        Phaser.WEBGL,
+        Phaser.AUTO,
         'parentElement'
     );
 
@@ -201,7 +201,7 @@ Manager.prototype = {
 var Network = function (host, manager) {
 
     this.manager = manager;
-    this.manager.network = this; //do not like this.
+    this.manager.network = this; //do not like this
 
     this.player = null;
     this.ready = false;
@@ -233,6 +233,7 @@ var Network = function (host, manager) {
     }.bind(this));
 
 };
+
 'use strict';
 
 
@@ -303,3 +304,38 @@ var Network = function (host, manager) {
          this.manager.emitMove(this);
      }
  };
+
+'use strict';
+
+var Map = function (width, height) {
+    this.width = width;
+    this.height = height;
+
+    this.tiles = [];
+    for (var x = 0; x < width; x++) {
+        this.tiles[x] = [];
+        for (var y = 0; y < height; y++) {
+            this.tiles[x][y] = new Tile();
+        }
+    }
+
+    this.description = "default description";
+};
+
+Map.prototype = {
+
+};
+
+/**
+ * Created by Ben on 03/12/2014.
+ */
+
+var Tile = function() {
+    this.tiletype = null;
+    this.contents = [];
+    this.passable = true;
+}
+
+Tile.prototype = {
+
+}

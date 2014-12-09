@@ -3,7 +3,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     concat: {
       client: {
-        src:  ['src/client/**/*.js'],
+        src:  ['src/client/**/*.js', 'src/shared/**/*.js'],
         dest: 'public/assets/javascript/application.js'
       }
     },
@@ -16,14 +16,17 @@ module.exports = function(grunt) {
     jasmine: {
       pivotal: {
         src: [
-          'public/assets/javascript/jquery-2.1.1.min.js',
-          'public/assets/javascript/underscore.js',
-          'public/assets/javascript/phaser.min.js',
-          'public/assets/javascript/phaser-plugin-isometric.js',
           'public/assets/javascript/application.js'
         ],
         options: {
-          specs: 'spec/client/networkSpec.js'
+          vendor: [
+            'public/assets/javascript/jquery-2.1.1.min.js',
+            'spec/vendor/socket.io.client.js',
+            'public/assets/javascript/underscore.js',
+            'public/assets/javascript/phaser.min.js',
+            'public/assets/javascript/phaser-plugin-isometric.js'
+          ],
+          specs: 'spec/client/*.js'
         }
       }
     },

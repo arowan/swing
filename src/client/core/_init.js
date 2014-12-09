@@ -12,7 +12,7 @@ $(document).ready(function(){
     var game = new Phaser.Game(
         1024,
         768,
-        Phaser.WEBGL,
+        Phaser.AUTO,
         'parentElement'
     );
 
