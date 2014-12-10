@@ -61,7 +61,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-nodemon');
 
   grunt.registerTask("test", ["jasmine", "mochaTest"]);
-  grunt.registerTask("default", ["test", "concat"]);
+  grunt.registerTask("default", ["concat", "test"]);
   grunt.registerTask("server", ['nodemon']);
   grunt.registerTask("client", ['watch']);
 
