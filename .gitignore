@@ -1,3 +1,5 @@
 /node_modules
 .idea
 .grunt
+public/assets/javascript
+public/index.html

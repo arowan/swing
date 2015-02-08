@@ -7,37 +7,43 @@ module.exports = function(grunt) {
     //     dest: 'public/assets/javascript/application.js'
     //   }
     // },
+    sync: {
+      main: {
+        files: [{
+          cwd: 'src',
+          src: ['client/**/*', 'shared/**/*', 'vendor/*'],
+          dest: 'public/assets/javascript/'
+        }],
+        verbose: true,
+        updateAndDelete: true
+      }
+    },
     includeSource: {
       options: {
-        basePath: ['src/client', 'src/shared'],
+        basePath: 'src',
         baseUrl: 'public/assets/javascript/'
       },
       myTarget: {
         files: {
-          'public/index.html': 'src/index.html'
+          'public/index.html': 'src/index.template.html'
         }
       }
     },
     watch: {
       app: {
         files: ['src/**/*.js','spec/**/*Spec.js'],
-        tasks: "default"
+        tasks: "buildWithTest"
       }
     },
     jasmine: {
       pivotal: {
         src: [
-          'public/assets/javascript/application.js'
+          'public/assets/javascript/client/*.js',
+          'public/assets/javascript/shared/*.js'
         ],
         options: {
-          vendor: [
-            'public/assets/javascript/jquery-2.1.1.min.js',
-            'spec/vendor/socket.io.client.js',
-            'public/assets/javascript/underscore.js',
-            'public/assets/javascript/require.js',
-            'public/assets/javascript/phaser.min.js',
-            'public/assets/javascript/phaser-plugin-isometric.js'
-          ],
+          vendor: 'public/assets/javascript/vendor/*.js'
+          ,
           display: 'full',
           specs: 'spec/client/*.js'
         }
@@ -47,7 +53,10 @@ module.exports = function(grunt) {
       options: {
         reporter: 'spec',
         clearRequireCache: true,
-        colors: true
+        colors: true,
+        require: [
+            'requirejs'
+        ]
       },
       all: ["spec/server/*Spec.js"]
     },
@@ -72,13 +81,15 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-mocha-test");
   grunt.loadNpmTasks("grunt-nodemon");
   grunt.loadNpmTasks("grunt-include-source");
+  grunt.loadNpmTasks('grunt-sync');
 
-  grunt.registerTask("test", ["jasmine", "mochaTest"]);
+  grunt.registerTask("test", ["mochaTest"]);
+  grunt.registerTask("buildWithTest", ["includeSource", "sync", "test"]);
   // grunt.registerTask("default", ["concat", "test"]);
   // grunt.registerTask("default", ["test"]);
   // grunt.registerTask("client", ['watch']);
 
-  grunt.registerTask("dev", ['watch', 'test', 'includeSource']);
+  grunt.registerTask("dev", ["watch"]);
   // grunt.registerTask("prod", ['concat', 'test']);
   grunt.registerTask("server", ['nodemon']);
 

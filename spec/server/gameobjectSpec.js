@@ -1,8 +1,16 @@
 /**
 * Created by Ben on 06/12/2014.
 */
+var requirejs = require('requirejs');
 
-var GameObject = require("../../src/server/gameobject.js");
+requirejs.config({
+    //Pass the top-level main.js/index.js require
+    //function to requirejs so that node modules
+    //are loaded relative to the top-level JS file.
+    nodeRequire: require
+});
+
+var GameObject = require("../../src/shared/gameobject.js");
 var expect = require("expect.js");
 
 describe("GameObject", function() {

@@ -5,6 +5,8 @@
   "private": true,
   "dependencies": {
     "express": "^4.10.2",
+    "grunt-sync": "^0.2.3",
+    "requirejs": "^2.1.15",
     "socket.io": "*",
     "underscore": "^1.7.0"
   },
