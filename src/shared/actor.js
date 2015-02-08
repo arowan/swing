@@ -13,3 +13,4 @@ Actor.prototype = Object.create(GameObject.prototype);
 Actor.prototype.constructor = Actor;
 
 module.exports = Actor;
+

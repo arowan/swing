@@ -1,7 +1,7 @@
 /**
  * Created by Ben on 06/12/2014.
  */
-var GameObject = require("./gameobject.js");
+var GameObject = require("../shared/gameobject.js");
 var User = require("./user.js")
 var _ = require('underscore');
 

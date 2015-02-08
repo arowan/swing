@@ -47,4 +47,4 @@ Store.prototype = {
 };
 
 // if module, so it'll work both server and client side.
-if (module) module.exports = Store;
+if (typeof module != "undefined") module.exports = Store;

@@ -5,7 +5,7 @@
 // TODO: Move this to shared or something, the name conflicts with the client player in Jasmine
     // Not sure we will be able to share this. 'require' wont be available to the client.
 
-var Actor = require("../../src/server/actor.js");
+var Actor = require("../shared/actor.js");
 var _ = require('underscore');
 
 var ServerPlayer = function() {

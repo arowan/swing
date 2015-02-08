@@ -10,7 +10,7 @@ var GameObject = function () {
 
 GameObject.prototype = {
     setCoordinates: function (x, y) {
-      // Set GameObject coordinates in one go
+        // Set GameObject coordinates in one go
         this.x = x;
         this.y = y;
     },

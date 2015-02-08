@@ -5,7 +5,7 @@ var Manager = function () {
     this.game = null;
     this.group = null;
     this.network = null;
-    this.user = null; // dont like this.
+    this.user = null; // dont like this. 
 
     this.updates = [];
 };
